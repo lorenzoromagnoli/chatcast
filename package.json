@@ -3,17 +3,28 @@
   "version": "0.1.1",
   "description": "A conversation recording and archiving platform",
   "main": "server.js",
+
+  package.json (Updated Scripts)[
   "scripts": {
-    "start": "node server.js",
-    "dev": "concurrently \"npm run sass:watch\" \"nodemon server.js\"",
-    "dev:safe": "TELEGRAM_DISABLED=true nodemon server.js",
+    "start": "NODE_ENV=production node server.js",
+    "dev": "NODE_ENV=development concurrently \"npm run sass:watch\" \"nodemon server.js\"",
+    "dev:safe": "NODE_ENV=development TELEGRAM_DISABLED=true nodemon server.js",
+    "test": "NODE_ENV=test npm run test:unit",
+    "test:unit": "jest",
+    "test:telegram": "NODE_ENV=test node test-telegram.js",
     "sass:build": "sass src/styles/main.scss public/style.css --style=compressed",
     "sass:watch": "sass src/styles/main.scss public/style.css --watch --style=expanded --source-map",
     "sass:dev": "sass src/styles/main.scss public/style.css --watch --style=expanded --source-map",
     "build": "npm run sass:build",
     "init-db": "node init-databases.js",
-    "reset-db": "rm -f data/*.db && npm run init-db"
-  },
+    "init-db:dev": "NODE_ENV=development node init-databases.js",
+    "init-db:prod": "NODE_ENV=production node init-databases.js",
+    "reset-db": "rm -f .data/*.db data/*.db && npm run init-db",
+    "reset-db:dev": "rm -f .data/*-dev.db && NODE_ENV=development npm run init-db",
+    "reset-db:test": "rm -f .data/*-test.db && NODE_ENV=test npm run init-db"
+    }
+  }
+
   "dependencies": {
     "@fastify/cors": "^8.4.0",
     "@fastify/formbody": "^7.4.0",
